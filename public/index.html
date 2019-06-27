@@ -12,6 +12,24 @@
       <strong>We're sorry but scrape_invest doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
     <div id="app"></div>
-    <!-- built files will be auto injected -->
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/6.2.3/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.2.3/firebase-firestore.js"></script>
+
+    <script>
+      // Your web app's Firebase configuration
+      var firebaseConfig = {
+        apiKey: "AIzaSyCoxQd2mBUDn9YfLhkKux48bsNpn0qVcL4",
+        authDomain: "scrape-invest.firebaseapp.com",
+        databaseURL: "https://scrape-invest.firebaseio.com",
+        projectId: "scrape-invest",
+        storageBucket: "scrape-invest.appspot.com",
+        messagingSenderId: "296487557991",
+        appId: "1:296487557991:web:0a2d51389177789e"
+      };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+    </script>
   </body>
 </html>
