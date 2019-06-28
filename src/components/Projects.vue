@@ -25,9 +25,6 @@ var getProjectItems = async function(project_name) {
       return Math.round(x["prices"].reduce(function(curr, sum) {
         return curr + sum}) / x["prices"].length)
       })
-    console.log(item_min_price)
-    console.log(item_max_price)
-    console.log(average_price)
 
     var first_x_row = Array.from(Array(max_item_count).keys())
     first_x_row.unshift('x')
@@ -44,9 +41,7 @@ var getProjectItems = async function(project_name) {
       records.unshift(date)
       load_rows.push(records)
     })
-    // item_min_price.unshift(date)
-    // item_max_price.unshift(date)
-    // average_price.unshift(date)
+
     var load_columns = [column_dates]
     load_columns.push(item_min_price)
     load_columns.push(item_max_price)
