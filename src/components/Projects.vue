@@ -1,23 +1,35 @@
 <template>
-  <div id="projects">
-    <!-- Dynamically generated projects from firestore go here -->
+  <div class="content">
+    <div id="projects">
+      <!-- Dynamically generated projects from firestore go here -->
+    </div>
+    <div id="billboard"></div>
   </div>
 </template>
 
 <script>
 var database = firebase.firestore();
 
-var getProjectItems = function(project_name) {
+var getProjectItems = async function(project_name) {
   var project_items = []
-  database.collection("project_items").where("project", "==", project_name).get()
-  .then(function(snapshot) {
+  await database.collection("project_items").where("project", "==", project_name).get().then(function(snapshot) {
     snapshot.forEach(function(doc) {
       project_items.push({"prices": doc.data()["prices"], "date": doc.data()["date_scraped"]})
     })
+
+    var max_item_count = Math.max(...project_items.map(function(x) {return x["prices"].length}))
+    var first_x_row = Array.from(Array(max_item_count).keys())
+    first_x_row.unshift('x')
+    var load_rows = [first_x_row]
+
+    project_items.forEach(function(item) {
+      var records = item["prices"]
+      var date = new Date(item["date"]["seconds"]*1000)
+      records.unshift(date)
+      load_rows.push(records)
+    })
+    chart.load({rows: load_rows, unload: true});
   })
-  console.log('OK')
-  console.log(project_name)
-  console.log(project_items)
 }
 
 // Iterate through projects and create an HTML element for each of them
@@ -39,22 +51,27 @@ export default {
     msg: String
   }
 }
+
+var chart = bb.generate({
+  bindto: "#billboardjs",
+  data: { x: "x", type: "scatter", rows: []},
+  legend: { show: false},
+  axis: { x: { type: "timeseries", tick: { format: "%d-%m-%Y"}}, y: { label: "PLN"}},
+  color: { pattern: ["#A9A9A9"]}
+});
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 h3 {
   margin: 40px 0 0;
-}
-ul {
+} ul {
   list-style-type: none;
   padding: 0;
-}
-li {
+} li {
   display: inline-block;
   margin: 0 10px;
-}
-a {
+} a {
   color: #42b983;
 }
 </style>

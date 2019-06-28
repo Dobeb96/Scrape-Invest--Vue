@@ -6,6 +6,3 @@ Vue.config.productionTip = false
 new Vue({
   render: h => h(App),
 }).$mount('#app')
-function getProjectItems(project_name) {
-  console.log(project_name)
-}
