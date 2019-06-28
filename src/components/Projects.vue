@@ -3,6 +3,7 @@
     <div id="projects">
       <!-- Dynamically generated projects from firestore go here -->
     </div>
+    <div id="stats_billboard"></div>
     <div id="billboard"></div>
   </div>
 </template>
@@ -17,18 +18,41 @@ var getProjectItems = async function(project_name) {
       project_items.push({"prices": doc.data()["prices"], "date": doc.data()["date_scraped"]})
     })
 
-    var max_item_count = Math.max(...project_items.map(function(x) {return x["prices"].length}))
+    var max_item_count = Math.max(...project_items.map(function(x) { return x["prices"].length}))
+    var item_min_price = project_items.map(function(x) { return Math.min(...x["prices"])})
+    var item_max_price = project_items.map(function(x) { return Math.max(...x["prices"])})
+    var average_price  = project_items.map(function(x) {
+      return Math.round(x["prices"].reduce(function(curr, sum) {
+        return curr + sum}) / x["prices"].length)
+      })
+    console.log(item_min_price)
+    console.log(item_max_price)
+    console.log(average_price)
+
     var first_x_row = Array.from(Array(max_item_count).keys())
     first_x_row.unshift('x')
+    item_min_price.unshift('minimum')
+    item_max_price.unshift('maximum')
+    average_price.unshift('average')
     var load_rows = [first_x_row]
 
+    var column_dates = ['x']
     project_items.forEach(function(item) {
       var records = item["prices"]
       var date = new Date(item["date"]["seconds"]*1000)
+      column_dates.push(date)
       records.unshift(date)
       load_rows.push(records)
     })
-    chart.load({rows: load_rows, unload: true});
+    // item_min_price.unshift(date)
+    // item_max_price.unshift(date)
+    // average_price.unshift(date)
+    var load_columns = [column_dates]
+    load_columns.push(item_min_price)
+    load_columns.push(item_max_price)
+    load_columns.push(average_price)
+    stats_chart.load({columns: load_columns, unload: true})
+    chart.load({rows: load_rows, unload: true})
   })
 }
 
@@ -52,12 +76,25 @@ export default {
   }
 }
 
+var stats_chart = bb.generate({
+  bindto: "#stats_billboardjs",
+  data: { x: "x", types: {minimum: "spline", maximum: "area-spline", average: "area-spline"}, columns: [], rows: []},
+  axis: {
+    x: { type: "timeseries", tick: { format: "%d-%m-%Y"}},
+    y: { min: 0, label: "PLN", tick: { format: function(x) { return (x) + " PLN" }}}},
+  color: { pattern: ["#ccc", "#aaa", "navy"]},
+  grid: { x: { show: true}, y: { show: true}}
+});
+
 var chart = bb.generate({
   bindto: "#billboardjs",
-  data: { x: "x", type: "scatter", rows: []},
+  data: { x: "x", type: "scatter", columns: [], rows: []},
   legend: { show: false},
-  axis: { x: { type: "timeseries", tick: { format: "%d-%m-%Y"}}, y: { label: "PLN"}},
-  color: { pattern: ["#A9A9A9"]}
+  axis: {
+    x: { type: "timeseries", tick: { format: "%d-%m-%Y"}},
+    y: { min: 0, label: "PLN", tick: { format: function(x) { return (x) + " PLN" }}}},
+  color: { pattern: ["navy"]},
+  grid: { x: { show: true}, y: { show: true}}
 });
 </script>
 
