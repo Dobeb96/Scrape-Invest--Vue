@@ -5,7 +5,7 @@
       <!-- Dynamically generated projects from firestore go here -->
     </div>
     <section>
-      <h1 id="project_name">:/</h1>
+      <h1 id="project_name"><span style="color:transparent">-</span></h1>
       <div id="stats_billboard" class="billboard"></div>
       <div id="billboard" class="billboard"></div>
     </section>
@@ -57,6 +57,7 @@ var getProjectItems = async function(project_name) {
   })
 }
 
+var first_project = null
 // Iterate through projects and create an HTML element for each of them
 // Each element has an onclick listener
 database.collection("projects").get().then(function(snapshot) {
@@ -67,8 +68,16 @@ database.collection("projects").get().then(function(snapshot) {
     project.innerHTML = doc.id
     document.getElementById("projects").appendChild(project)
     document.getElementById(doc.id).addEventListener("click", function() {getProjectItems(doc.id)}, false)
+    if (!first_project) {
+      document.getElementById('project_name').innerHTML = doc.id
+      first_project = project
+    }
   })
 })
+
+setTimeout(function() {
+  first_project.click();
+}, 800);
 
 export default {
   name: 'Projects',
@@ -80,7 +89,6 @@ export default {
 var stats_chart = null
 var chart = null
 document.addEventListener("DOMContentLoaded", function(event) {
-
   stats_chart = bb.generate({
     bindto: "#stats_billboard",
     data: { x: "x", types: {minimum: "spline", maximum: "spline", average: "line"}, columns: [], rows: []},
