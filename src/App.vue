@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
     <Projects></Projects>
   </div>
 </template>
@@ -17,12 +16,20 @@ export default {
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+body {
+  position: relative;
+  width: 100%;
+  margin: 0; padding: 0;
+} #app {
+  font-family: "Bungee";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+} img {
+  position: absolute;
+  top: 0; left: 0;
+  padding: 0;
+} h2 {
+  cursor: pointer;
 }
 </style>
