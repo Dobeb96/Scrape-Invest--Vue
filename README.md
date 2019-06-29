@@ -1,29 +1,7 @@
-# scrape_invest
+# Scrape-Invest--Vue
+Fron-end for my investment scraping project.
 
-## Project setup
-```
-npm install
-```
+This **Vue.js** application connects to my **Firestore** database, gets all available scraping projects, and presents them in a nice format using **Billboard.js** library.
 
-### Compiles and hot-reloads for development
-```
+# How to run locally
 npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Run your tests
-```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
